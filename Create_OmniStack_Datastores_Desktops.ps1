@@ -1,8 +1,6 @@
 ﻿#Create Datastores for Desktop Deployment
 [Int64]$TBinBytes = 1099511627776
 
-Import-Module c:\Users\jason\desktop\Simplivity.psm1
-
 #Connect to OmniStack Virtual Controller
 $OVC = Read-Host "Enter the Management IP Address for a local OmniStack Virtual Controller"
 Connect-OmniStack -Server $OVC -IgnoreCertReqs
