@@ -4,11 +4,11 @@
 $OVC = Read-Host "Enter the Management IP Address for a local OmniStack Virtual Controller"
 Connect-OmniStack -Server $OVC -IgnoreCertReqs
 
-$ManagementVMs = "OfficeWorkerTemplate"
+$Site1FCs = "fullclone1-1","fullclone1-2","fullclone1-3","fullclone1-4","fullclone1-5"
 
-foreach ($ManagementVM in $ManagementVMs) {
+foreach ($Site1FC in $Site1FCs) {
 	$backupstosort = @()
-	$Backups = Get-OmniStackVMBackups -Name $ManagementVM
+	$Backups = Get-OmniStackBackups | where {$_.VirtualMachineName -eq $Site1FC}
 	
 		foreach ($Backup in $backups) {
 		$Backup1 = $Backup.Name
@@ -17,6 +17,7 @@ foreach ($ManagementVM in $ManagementVMs) {
 	$backupstosort = $backupstosort | Sort-Object -Descending
 	$backupname = $backupstosort[0]
 	
-	Restore-OmniStackVM -Name $ManagementVM -NewVMName $ManagementVM"-Restored-"$backupname -DestinationDatastore Desktops_Datastore0 -BackupName $backupname -RestoreOriginal:$false 
+	Write-Host "The latest backup for $Site1FC is " $Backupname
 	
+	Restore-OmniStackVM -BackupName $backup1 -Name $Site1FC -NewVMName $Site1FC -DestinationDatastore DC2_Datastore0 -RestoreOriginal:$false
 }
